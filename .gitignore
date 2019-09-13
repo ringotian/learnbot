@@ -1,0 +1,10 @@
+bin/
+bot.log
+include/
+lib/
+lib64
+pyvenv.cfg
+share
+.vscode
+__pycache__/
+settings.py
