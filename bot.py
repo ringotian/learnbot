@@ -38,15 +38,28 @@ def check_constellation(bot, update):
         update.message.reply_text(f'{planet_name} now in {result_constellation} constellation')
     else:
         update.message.reply_text("I know nothing about this planet")
- 
+
+def word_count(bot, update):
+    user_text = update.message.text[10:]
+    if user_text:
+        for word in user_text.split():
+            if word.isalpha() == False:
+                update.message.reply_text('Строка должна содержать только буквы и пробелы')
+                break
+        else: 
+            world_counter = len(user_text.split())
+            update.message.reply_text(f'Строка содержит {world_counter} слов')
+    else: 
+        update.message.reply_text('Вы ничего не ввели')
+
 def main():
-    mybot = Updater(settings.API_KEY, request_kwargs=settings.PROXY)
+    mybot = Updater(settings.API_KEY)
     
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
     #dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler("planet", check_constellation))
-
+    dp.add_handler(CommandHandler("wordcount", word_count))
     
     mybot.start_polling()
     mybot.idle()
