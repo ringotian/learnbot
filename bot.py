@@ -23,7 +23,6 @@ def greet_user(bot, update):
     print(text)
     update.message.reply_text(text)
 
-
 def talk_to_me(bot, update):
     user_text = update.message.text 
     print(user_text)
@@ -44,14 +43,29 @@ def full_moon(bot, update):
     next_full_moon_date = ephem.next_full_moon(user_data)
     update.message.reply_text(f'Следующее полнолуние {next_full_moon_date}')
 
+def word_count(bot, update):
+    user_text = update.message.text[10:]
+    if user_text:
+        for word in user_text.split():
+            if word.isalpha() == False:
+                update.message.reply_text('Строка должна содержать только буквы и пробелы')
+                break
+        else: 
+            world_counter = len(user_text.split())
+            update.message.reply_text(f'Строка содержит {world_counter} слов')
+    else: 
+        update.message.reply_text('Вы ничего не ввели')
+
+
 def main():
-    mybot = Updater(settings.API_KEY, request_kwargs=settings.PROXY)
+    mybot = Updater(settings.API_KEY)
     
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
     #dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler("planet", check_constellation))
     dp.add_handler(CommandHandler('next_full_moon', full_moon))
+    dp.add_handler(CommandHandler("wordcount", word_count))
     
     mybot.start_polling()
     mybot.idle()
