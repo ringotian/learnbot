@@ -39,6 +39,11 @@ def check_constellation(bot, update):
     else:
         update.message.reply_text("I know nothing about this planet")
  
+def full_moon(bot, update):
+    user_data = update.message.text.split()[1]
+    next_full_moon_date = ephem.next_full_moon(user_data)
+    update.message.reply_text(f'Следующее полнолуние {next_full_moon_date}')
+
 def main():
     mybot = Updater(settings.API_KEY, request_kwargs=settings.PROXY)
     
@@ -46,7 +51,7 @@ def main():
     dp.add_handler(CommandHandler("start", greet_user))
     #dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler("planet", check_constellation))
-
+    dp.add_handler(CommandHandler('next_full_moon', full_moon))
     
     mybot.start_polling()
     mybot.idle()
